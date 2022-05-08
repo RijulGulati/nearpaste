@@ -1,0 +1,15 @@
+@import "./Colors.scss";
+
+.table {
+    width: 95%;
+}
+
+@media screen and (max-width: 768px) {
+    .table {
+        width: 100%;
+    }
+
+    .table-row {
+        font-size: 12px;
+    }
+}

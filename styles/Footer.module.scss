@@ -1,0 +1,28 @@
+@import "./Colors.scss";
+
+.footer {
+    background-color: $background-color;
+    border-top: 1px solid $border-color;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.fa-icon {
+    color: black;
+    font-size: 18px;
+}
+
+.fa-icon:hover {
+    color: inherit;
+}
+
+.copyright, .stats-link {
+    font-size: 16px;
+}
+
+@media screen and (max-width: 768px) {
+    .fa-icon, .copyright, .stats-link {
+        font-size: 14px;
+    }
+}

@@ -1,0 +1,28 @@
+@import "./Colors.scss";
+
+.sider {
+    background-color: $background-color;
+}
+
+.sider-entry {
+    max-height: 280px;
+    border-left: 1px solid $border-color;
+    padding-left: 15px;
+}
+
+.recent-posts {
+    margin-top: 16px;
+    overflow-y: auto;
+    line-height: 12px;
+}
+
+.heading {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+@media screen and (max-width: 768px) {
+    .sider {
+        display: none;
+    }
+}

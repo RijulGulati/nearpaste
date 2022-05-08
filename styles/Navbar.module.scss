@@ -1,0 +1,18 @@
+@import "./Colors.scss";
+
+.navbar {
+    border-bottom: 1px solid $border-color;
+    background-color: $background-color;
+    display: flex;
+    justify-content: space-between;
+}
+
+.fa-icon {
+    font-size: 22px;
+    color: black;
+    right: 0;
+}
+
+.fa-icon:hover {
+    color: inherit;
+}

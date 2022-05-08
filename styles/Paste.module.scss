@@ -1,0 +1,20 @@
+@import './Colors.scss';
+
+.textbox {
+    width: 80% !important;
+    resize: none;
+}
+
+.url-box {
+    width: 40% !important;
+}
+
+.textbox:disabled, .url-box:disabled {
+    background-color: $background-color;
+    color: black;
+    cursor: default;
+}
+
+.url-group {
+    margin-top: 40px;
+}
