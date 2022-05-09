@@ -1,9 +1,9 @@
 use near_sdk::{
     borsh::{self, BorshDeserialize, BorshSerialize},
-    collections::LookupMap,
+    collections::{LookupMap, UnorderedSet},
     env, near_bindgen,
     serde::{Deserialize, Serialize},
-    AccountId, PanicOnDefault,
+    PanicOnDefault,
 };
 
 #[derive(BorshSerialize, BorshDeserialize, Debug, Serialize, Deserialize, Default)]
@@ -20,6 +20,7 @@ pub struct Paste {
 #[derive(BorshSerialize, BorshDeserialize, PanicOnDefault)]
 pub struct Contract {
     pastes: LookupMap<String, Paste>,
+    pastes_set: UnorderedSet<String>,
 }
 
 #[near_bindgen]
@@ -28,31 +29,8 @@ impl Contract {
     pub fn new() -> Self {
         Self {
             pastes: LookupMap::new(b"p"),
+            pastes_set: UnorderedSet::new(b"s"),
         }
-    }
-
-    pub fn signed(&mut self) -> Vec<AccountId> {
-        env::log_str(&format!(
-            "{:?}, {:?}, {:?}",
-            env::current_account_id(),
-            env::predecessor_account_id(),
-            env::signer_account_id()
-        ));
-
-        if env::current_account_id() != env::predecessor_account_id()
-            && env::current_account_id() != env::signer_account_id()
-        {
-            env::panic_str(&format!(
-                "paste can only be created by account {}",
-                env::current_account_id()
-            ));
-        }
-
-        vec![
-            env::current_account_id(),
-            env::predecessor_account_id(),
-            env::signer_account_id(),
-        ]
     }
 
     pub fn new_paste(
@@ -71,7 +49,19 @@ impl Contract {
             ));
         }
 
-        if self.pastes.contains_key(&id) {
+        if id == "" {
+            env::panic_str("id cannot be empty");
+        }
+
+        if title == "" {
+            env::panic_str("title cannot be empty");
+        }
+
+        if content == "" {
+            env::panic_str("content cannot be empty");
+        }
+
+        if self.pastes_set.contains(&id) {
             env::panic_str(&format!("id {} already exists", id));
         }
 
@@ -84,11 +74,16 @@ impl Contract {
         };
 
         self.pastes.insert(&paste.id, paste);
+        self.pastes_set.insert(&paste.id);
         true
     }
 
     pub fn get_paste(&self, id: String) -> Option<Paste> {
         self.pastes.get(&id)
+    }
+
+    pub fn get_total_pastes(&self) -> u64 {
+        self.pastes_set.len()
     }
 }
 
