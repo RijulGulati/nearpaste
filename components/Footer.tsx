@@ -1,4 +1,4 @@
-import { Divider, Space } from 'antd';
+import { Space } from 'antd';
 import { Footer as AntFooter } from 'antd/lib/layout/layout';
 import { NextPage } from 'next';
 import Link from 'next/link';
@@ -9,9 +9,7 @@ const Footer: NextPage = () => {
   return (
     <>
       <AntFooter className={style['footer']}>
-        <Link href={'/stats'}>
-          <a className={style['stats-link']}>Stats</a>
-        </Link>
+        <span></span>
         <span className={style['copyright']}>© Rijul Gulati</span>
         <span>
           <Space size={'middle'}>

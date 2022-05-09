@@ -1,10 +1,15 @@
-import { Button, Divider, Form, Input } from 'antd';
-import { FinalExecutionStatus } from 'near-api-js/lib/providers';
-import type { NextPage } from 'next';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import style from '../styles/Home.module.scss';
-import { Paste } from '../utils/common';
+import { Button, Divider, Form, Input, message } from "antd";
+import type { NextPage } from "next";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { FaArrowRight } from "react-icons/fa";
+import style from "../styles/Home.module.scss";
+import { Paste } from "../utils/common";
+import {
+  getNodeInfoFromNetworkId,
+  getTxnSuccessValue,
+  NETWORK_ID,
+} from "../utils/near";
 
 interface PasteForm {
   content: string;
@@ -12,21 +17,17 @@ interface PasteForm {
   password?: string;
 }
 
-enum PasteStatus {
-  SUCCESS,
-  ERROR,
-}
-
 const Home: NextPage = () => {
   const [loader, setLoader] = useState<boolean>(false);
-  const [buttonText, setButtonText] = useState<string>('');
-  const [pasteStatus, setPasteStatus] = useState<number>(PasteStatus.SUCCESS);
+  const [buttonText, setButtonText] = useState<string>("");
+  const [txnId, setTxnId] = useState<string>("");
+  const [pasteId, setPasteId] = useState<string>("");
 
   useEffect(() => {
     if (loader) {
-      setButtonText('Creating Paste...');
+      setButtonText("Creating...");
     } else {
-      setButtonText('Create New Paste');
+      setButtonText("Create New Paste");
     }
   }, [loader]);
 
@@ -36,58 +37,71 @@ const Home: NextPage = () => {
       setLoader(true);
       const paste = new Paste(values.title, values.content, values.password);
       let result = await paste.createPaste();
+      debugger;
       setLoader(false);
-      setPasteStatus(PasteStatus.SUCCESS);
-      console.log('Transaction hash: ', result.transaction_outcome.id);
-      console.log('Gas burnt: ', result.transaction_outcome.outcome.gas_burnt);
-    } catch (err) {
+      let pasteResult = getTxnSuccessValue(result.executionOutcome.status);
+      if (pasteResult === "true") {
+        setTxnId(result.executionOutcome.transaction_outcome.id);
+        setPasteId(result.id);
+      }
+    } catch (err: any) {
+      message.error(err);
       setLoader(false);
-      setPasteStatus(PasteStatus.ERROR);
       console.error(err);
     }
   };
 
   const onFinishFailed = (error: any) => {
-    console.log('Failed: ', error);
+    console.log("Failed: ", error);
   };
 
   return (
     <>
       <h2>New Paste</h2>
       <Form
-        className={style['form']}
-        name={'paste-form'}
+        className={style["form"]}
+        name={"paste-form"}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
-          name={'title'}
+          name={"title"}
           rules={[
             {
               required: true,
-              message: 'Please input title',
+              message: "Please input title",
             },
           ]}
         >
-          <Input placeholder='Title' />
+          <Input placeholder="Title" />
         </Form.Item>
         <Form.Item
-          name={'content'}
+          name={"content"}
           rules={[
             {
               required: true,
-              message: 'Please input content',
+              message: "Please input content",
             },
           ]}
         >
           <Input.TextArea
             rows={13}
-            style={{ resize: 'none' }}
-            placeholder='Content'
+            style={{ resize: "none" }}
+            placeholder="Content"
           />
         </Form.Item>
+        <Form.Item
+          name={"password"}
+          rules={[
+            {
+              required: false,
+            },
+          ]}
+        >
+          <Input placeholder="Password (Optional)" type={"password"} />
+        </Form.Item>
         <Form.Item>
-          <Button htmlType={'submit'} type={'primary'} loading={loader}>
+          <Button htmlType={"submit"} type={"primary"} loading={loader}>
             {buttonText}
           </Button>
         </Form.Item>
@@ -95,18 +109,24 @@ const Home: NextPage = () => {
 
       <Divider />
       <>
-        {pasteStatus == PasteStatus.ERROR ? (
+        {txnId ? (
           <>
-            <h2>Error creating paste</h2>
-          </>
-        ) : pasteStatus == PasteStatus.SUCCESS ? (
-          <>
-            <h2>Paste created</h2>
-            <p>Transaction Id: {}</p>
-            <p>View in explorer: {}</p>
             <p>
-              <Link href={`#`}>
-                <a>View Paste</a>
+              Transaction Id:{" "}
+              <Link
+                href={`${
+                  getNodeInfoFromNetworkId(NETWORK_ID).explorerUrl
+                }/transactions/${txnId}`}
+              >
+                <a target={"_blank"}>{txnId}</a>
+              </Link>
+            </p>
+
+            <p>
+              <Link href={`/${pasteId}`}>
+                <a style={{ display: "flex", alignItems: "center" }}>
+                  View Paste <FaArrowRight style={{ marginLeft: "5px" }} />
+                </a>
               </Link>
             </p>
           </>

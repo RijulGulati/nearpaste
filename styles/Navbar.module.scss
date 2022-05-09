@@ -8,11 +8,18 @@
 }
 
 .fa-icon {
-    font-size: 22px;
+    font-size: 18px;
     color: black;
-    right: 0;
+    margin-left: 36px;
+    width: fit-content;
 }
 
 .fa-icon:hover {
     color: inherit;
+}
+
+.right-content {
+    display: flex;
+    width: 130px;
+    justify-content: space-evenly;
 }

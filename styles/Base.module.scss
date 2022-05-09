@@ -1,25 +1,25 @@
 @import "./Colors.scss";
 
 .layout {
-    flex-direction: column !important;
+  flex-direction: column !important;
 }
 
 .container {
-    height: calc(100vh - 138px); // 64px=header
-    width: 100% !important;
+  height: calc(100vh - 50px); // 64px=header
+  width: 100% !important;
 }
 
 .content {
-    width: 50%;
-    margin: 0 auto;
-    padding: 18px;
-    background-color: $background-color;
-    flex-direction: row !important;
-    height: inherit;
+  width: 50%;
+  margin: 0 auto;
+  padding: 18px;
+  background-color: $background-color;
+  flex-direction: row !important;
+  height: inherit;
 }
 
 @media screen and (max-width: 768px) {
-    .content {
-        width: 100%;
-    }
+  .content {
+    width: 100%;
+  }
 }
