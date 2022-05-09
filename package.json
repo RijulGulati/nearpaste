@@ -9,7 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@types/crypto-js": "^4.1.1",
     "antd": "^4.20.2",
+    "crypto-js": "^4.1.1",
+    "near-api-js": "^0.44.2",
     "next": "12.1.6",
     "react": "18.1.0",
     "react-dom": "18.1.0",
