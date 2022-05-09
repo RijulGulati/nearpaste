@@ -168,4 +168,5 @@ export {
   createPaste,
   getPaste,
   getTxnSuccessValue,
+  getNodeInfoFromNetworkId,
 };
