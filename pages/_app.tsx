@@ -5,7 +5,6 @@ import Layout, { Content } from 'antd/lib/layout/layout';
 import BaseStyle from '../styles/Base.module.scss';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import Sidebar from '../components/Sidebar';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (

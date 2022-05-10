@@ -1,15 +1,22 @@
-import { Button, Divider, Form, Input, message } from "antd";
-import type { NextPage } from "next";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FaArrowRight } from "react-icons/fa";
-import style from "../styles/Home.module.scss";
-import { Paste } from "../utils/common";
+import { Button, Divider, Form, Input, message } from 'antd';
+import type { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
+import { Router } from 'next/router';
+import { useEffect, useState } from 'react';
+import { FaArrowRight } from 'react-icons/fa';
+import Spinner from '../components/Spinner';
+import style from '../styles/Home.module.scss';
 import {
+  encrypt,
+  getEnvironmentVariable,
   getNodeInfoFromNetworkId,
-  getTxnSuccessValue,
-  NETWORK_ID,
-} from "../utils/near";
+} from '../utils/common';
+import {
+  GenericPageProps,
+  HttpPasteCreateRequest,
+  HttpPasteCreateResponse,
+  HttpResponse,
+} from '../utils/interfaces';
 
 interface PasteForm {
   content: string;
@@ -17,91 +24,126 @@ interface PasteForm {
   password?: string;
 }
 
-const Home: NextPage = () => {
-  const [loader, setLoader] = useState<boolean>(false);
-  const [buttonText, setButtonText] = useState<string>("");
-  const [txnId, setTxnId] = useState<string>("");
-  const [pasteId, setPasteId] = useState<string>("");
+interface HomeProps extends GenericPageProps {}
+
+const Home: NextPage<HomeProps> = (props) => {
+  const [buttonLoader, setButtonLoader] = useState<boolean>(false);
+  const [pageLoader, setPageLoader] = useState<boolean>(false);
+  const [buttonText, setButtonText] = useState<string>('');
+  const [txnId, setTxnId] = useState<string>('');
+  const [pasteId, setPasteId] = useState<string>('');
 
   useEffect(() => {
-    if (loader) {
-      setButtonText("Creating...");
+    if (buttonLoader) {
+      setButtonText('Creating...');
     } else {
-      setButtonText("Create New Paste");
+      setButtonText('Create New Paste');
     }
-  }, [loader]);
+  }, [buttonLoader]);
+
+  useEffect(() => {
+    const start = () => {
+      setPageLoader(true);
+    };
+
+    const end = () => {
+      setPageLoader(false);
+    };
+
+    Router.events.on('routeChangeStart', start);
+    Router.events.on('routeChangeComplete', end);
+    Router.events.on('routeChangeError', end);
+
+    return () => {
+      Router.events.off('routeChangeStart', start);
+      Router.events.off('routeChangeComplete', end);
+      Router.events.off('routeChangeError', end);
+    };
+  }, []);
 
   const onFinish = async (values: PasteForm) => {
-    debugger;
-    try {
-      setLoader(true);
-      const paste = new Paste(values.title, values.content, values.password);
-      let result = await paste.createPaste();
-      debugger;
-      setLoader(false);
-      let pasteResult = getTxnSuccessValue(result.executionOutcome.status);
-      if (pasteResult === "true") {
-        setTxnId(result.executionOutcome.transaction_outcome.id);
-        setPasteId(result.id);
-      }
-    } catch (err: any) {
-      message.error(err);
-      setLoader(false);
-      console.error(err);
+    if (!values.title) {
+      values.title = 'Untitled';
     }
+    setButtonLoader(true);
+    let request: HttpPasteCreateRequest = {
+      content: values.password
+        ? encrypt(values.content, values.password)
+        : values.content,
+      title: values.password
+        ? encrypt(values.title, values.password)
+        : values.title,
+      isEncrypted: values.password ? true : false,
+    };
+
+    fetch('api/paste', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    })
+      .then((response) => response.json())
+      .then((data: HttpResponse) => {
+        const pasteData = data.data as HttpPasteCreateResponse;
+        setTxnId(pasteData.txnId);
+        setPasteId(pasteData.id);
+        message.success(
+          data.message ? data.message : 'Paste created successfully'
+        );
+      })
+      .catch((err) => {
+        console.error('error creating paste: ', err);
+        message.error('Error creating paste');
+      })
+      .finally(() => {
+        setButtonLoader(false);
+      });
   };
 
-  const onFinishFailed = (error: any) => {
-    console.log("Failed: ", error);
-  };
+  if (pageLoader) {
+    return <Spinner />;
+  }
 
   return (
     <>
       <h2>New Paste</h2>
-      <Form
-        className={style["form"]}
-        name={"paste-form"}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-      >
+      <Form className={style['form']} name={'paste-form'} onFinish={onFinish}>
         <Form.Item
-          name={"title"}
+          name={'content'}
           rules={[
             {
               required: true,
-              message: "Please input title",
-            },
-          ]}
-        >
-          <Input placeholder="Title" />
-        </Form.Item>
-        <Form.Item
-          name={"content"}
-          rules={[
-            {
-              required: true,
-              message: "Please input content",
+              message: 'Please input content',
             },
           ]}
         >
           <Input.TextArea
             rows={13}
-            style={{ resize: "none" }}
-            placeholder="Content"
+            style={{ resize: 'none' }}
+            placeholder='Content'
+            autoComplete='new-paste-content'
           />
         </Form.Item>
+        <Form.Item name={'title'} label='Paste Title'>
+          <Input placeholder='Untitled' autoComplete='new-paste-title' />
+        </Form.Item>
+
         <Form.Item
-          name={"password"}
+          className={style['password']}
+          name={'password'}
+          label='Password'
           rules={[
             {
               required: false,
             },
           ]}
         >
-          <Input placeholder="Password (Optional)" type={"password"} />
+          <Input.Password autoComplete='new-paste-password' />
         </Form.Item>
+        <br />
         <Form.Item>
-          <Button htmlType={"submit"} type={"primary"} loading={loader}>
+          <Button htmlType={'submit'} type={'primary'} loading={buttonLoader}>
             {buttonText}
           </Button>
         </Form.Item>
@@ -112,23 +154,26 @@ const Home: NextPage = () => {
         {txnId ? (
           <>
             <p>
-              Transaction Id:{" "}
+              Transaction Id:{' '}
               <Link
                 href={`${
-                  getNodeInfoFromNetworkId(NETWORK_ID).explorerUrl
+                  getNodeInfoFromNetworkId(
+                    props.networkId ? props.networkId : ''
+                  ).explorerUrl
                 }/transactions/${txnId}`}
               >
-                <a target={"_blank"}>{txnId}</a>
+                <a target={'_blank'}>{txnId}</a>
               </Link>
             </p>
 
             <p>
-              <Link href={`/${pasteId}`}>
-                <a style={{ display: "flex", alignItems: "center" }}>
-                  View Paste <FaArrowRight style={{ marginLeft: "5px" }} />
+              <Link href={`${props.host}/${pasteId}`}>
+                <a style={{ display: 'flex', alignItems: 'center' }}>
+                  View Paste <FaArrowRight style={{ marginLeft: '5px' }} />
                 </a>
               </Link>
             </p>
+            <br />
           </>
         ) : (
           <></>
@@ -136,6 +181,17 @@ const Home: NextPage = () => {
       </>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  return {
+    props: {
+      host: context.req.headers.host
+        ? 'http://' + context.req.headers.host
+        : '',
+      networkId: getEnvironmentVariable('NEAR_NETWORK_ID'),
+    },
+  };
 };
 
 export default Home;

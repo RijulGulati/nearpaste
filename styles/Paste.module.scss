@@ -20,10 +20,13 @@
   margin-top: 40px;
 }
 
-.spinner {
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-  flex-direction: column;
-  align-items: center;
+@media screen and (max-width: 768px) {
+  .url-box {
+    width: 70% !important;
+  }
+
+  .textbox {
+    width: 100% !important;
+  }
 }
+

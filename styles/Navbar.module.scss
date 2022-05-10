@@ -10,7 +10,7 @@
 .fa-icon {
     font-size: 18px;
     color: black;
-    margin-left: 36px;
+    padding-left: 36px;
     width: fit-content;
 }
 
@@ -22,4 +22,28 @@
     display: flex;
     width: 130px;
     justify-content: space-evenly;
+}
+
+@media screen and (max-width: 768px) {
+    .navbar {
+        padding: 0 20px;
+    }
+}
+
+@media screen and (max-width: 653px) {
+    .fa-icon {
+        padding-left: 10px;
+    }
+
+    .header {
+        font-size: 16px !important;
+    }
+
+    .navbar {
+        padding: 0 20px;
+    }
+
+    .text {
+        font-size: 12px !important;
+    }
 }

@@ -16,10 +16,15 @@
   background-color: $background-color;
   flex-direction: row !important;
   height: inherit;
+  overflow: auto;
 }
 
 @media screen and (max-width: 768px) {
   .content {
     width: 100%;
+  }
+
+  .container {
+    height: 100vh;
   }
 }
