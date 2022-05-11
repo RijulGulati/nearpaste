@@ -137,8 +137,17 @@ const Paste: NextPage<PasteDetailsProps> = (props) => {
                   defaultValue={`${props.host}/${paste.id}`}
                   disabled
                 />
-                <Tooltip title='copy url'>
-                  <Button icon={<CopyOutlined />} />
+                <Tooltip title='copy paste url'>
+                  <Button
+                    icon={<CopyOutlined />}
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      await navigator.clipboard.writeText(
+                        `${props.host}/${paste.id}`
+                      );
+                      message.success('Copied to clipboard');
+                    }}
+                  />
                 </Tooltip>
               </Input.Group>
             </span>
