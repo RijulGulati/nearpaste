@@ -26,7 +26,7 @@ const Navbar: NextPage = () => {
             </a>
           </Link>
 
-          <Link href={'https://github.com/RijulGulati/nearpastes'}>
+          <Link href={'https://github.com/RijulGulati/nearpaste'}>
             <a target={'_blank'}>
               <FaGithub className={style['fa-icon']}></FaGithub>
             </a>
