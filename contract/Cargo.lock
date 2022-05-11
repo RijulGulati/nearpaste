@@ -514,13 +514,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "near-paste"
-version = "0.1.0"
-dependencies = [
- "near-sdk",
-]
-
-[[package]]
 name = "near-primitives"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -664,6 +657,13 @@ dependencies = [
  "serde",
  "sha2",
  "sha3",
+]
+
+[[package]]
+name = "nearpaste"
+version = "0.1.0"
+dependencies = [
+ "near-sdk",
 ]
 
 [[package]]
