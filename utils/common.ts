@@ -1,4 +1,4 @@
-import { AES, enc } from 'crypto-js';
+import { AES, enc, format } from 'crypto-js';
 import {
   FinalExecutionStatus,
   FinalExecutionStatusBasic,

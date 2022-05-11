@@ -5,12 +5,7 @@ import { DownloadOutlined, CopyOutlined } from '@ant-design/icons';
 import { decrypt, getPasteUx } from '../../utils/common';
 import { useEffect, useState } from 'react';
 import { Router, useRouter } from 'next/router';
-import {
-  GenericPageProps,
-  HttpPasteGetResponse,
-  HttpResponse,
-  PasteUx,
-} from '../../utils/interfaces';
+import { GenericPageProps, PasteUx } from '../../utils/interfaces';
 import Spinner from '../../components/Spinner';
 import Link from 'next/link';
 

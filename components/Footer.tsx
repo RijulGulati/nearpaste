@@ -2,15 +2,14 @@ import { Space } from 'antd';
 import { Footer as AntFooter } from 'antd/lib/layout/layout';
 import { NextPage } from 'next';
 import Link from 'next/link';
-import { FaGithub, FaGlobe, FaTelegram } from 'react-icons/fa';
+import { FaDiscord, FaGithub, FaGlobe, FaTelegram } from 'react-icons/fa';
 import style from '../styles/Footer.module.scss';
 
 const Footer: NextPage = () => {
   return (
     <>
       <AntFooter className={style['footer']}>
-        <span></span>
-        <span className={style['copyright']}>© Rijul Gulati</span>
+        <span className={style['copyright']}>Author: Rijul Gulati</span>
         <span>
           <Space size={'middle'}>
             <Link href={'https://rijulgulati.com'}>
@@ -26,6 +25,11 @@ const Footer: NextPage = () => {
             <Link href={'https://t.me/rijulgulati'}>
               <a target={'_blank'}>
                 <FaTelegram className={style['fa-icon']} />
+              </a>
+            </Link>
+            <Link href={'https://discordapp.com/users/778312151467163670'}>
+              <a target={'_blank'}>
+                <FaDiscord className={style['fa-icon']} />
               </a>
             </Link>
           </Space>

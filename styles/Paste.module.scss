@@ -1,7 +1,6 @@
 @import "./Colors.scss";
 
 .textbox {
-  width: 80% !important;
   resize: none;
 }
 
@@ -20,13 +19,9 @@
   margin-top: 40px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1180px) {
   .url-box {
     width: 70% !important;
-  }
-
-  .textbox {
-    width: 100% !important;
   }
 }
 

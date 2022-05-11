@@ -1,7 +1,6 @@
 @import "./Colors.scss";
 
 .form {
-    width: 80%;
     resize: none;
 }
 
@@ -9,11 +8,7 @@
     width: 50%;
 }
 
-@media screen and (max-width: 768px) {
-    .form {
-        width: 100%;
-    }
-    .password {
-        width: 80%;
-    }
+.about {
+    font-size: 12px;
+    font-style: italic;
 }

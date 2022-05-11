@@ -5,26 +5,19 @@
 }
 
 .container {
-  height: calc(100vh - 50px); // 64px=header
+  min-height: 100vh !important;
   width: 100% !important;
+  background: $background-color;
 }
 
 .content {
-  width: 50%;
-  margin: 0 auto;
-  padding: 18px;
+  padding: 24px 15%;
   background-color: $background-color;
-  flex-direction: row !important;
   height: inherit;
-  overflow: auto;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1180px) {
   .content {
-    width: 100%;
-  }
-
-  .container {
-    height: 100vh;
+    padding: 24px 5% !important;
   }
 }

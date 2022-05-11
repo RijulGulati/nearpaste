@@ -8,10 +8,9 @@
 }
 
 .fa-icon {
-    font-size: 18px;
+    font-size: 22px;
     color: black;
-    padding-left: 36px;
-    width: fit-content;
+    margin-top: 18px;
 }
 
 .fa-icon:hover {
@@ -20,30 +19,34 @@
 
 .right-content {
     display: flex;
-    width: 130px;
-    justify-content: space-evenly;
+    width: 10%;
+    justify-content: space-between
 }
 
-@media screen and (max-width: 768px) {
-    .navbar {
-        padding: 0 20px;
-    }
-}
-
-@media screen and (max-width: 653px) {
-    .fa-icon {
-        padding-left: 10px;
-    }
-
-    .header {
-        font-size: 16px !important;
+@media screen and (max-width: 1180px) {
+    .right-content {
+        width: 25%;
     }
 
     .navbar {
-        padding: 0 20px;
-    }
-
-    .text {
-        font-size: 12px !important;
+        padding: 0 5%;
     }
 }
+
+// @media screen and (max-width: 653px) {
+//     .fa-icon {
+//         padding-left: 10px;
+//     }
+
+//     .header {
+//         font-size: 16px !important;
+//     }
+
+//     .navbar {
+//         padding: 0 20px;
+//     }
+
+//     .text {
+//         font-size: 12px !important;
+//     }
+// }

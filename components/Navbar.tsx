@@ -11,11 +11,13 @@ const Navbar: NextPage = () => {
   return (
     <>
       <Header className={`${style['navbar']}`}>
-        <Link href={'/'}>
-          <a>
-            <h1 className={style['header']}>NEAR Paste</h1>
-          </a>
-        </Link>
+        <span>
+          <Link href={'/'}>
+            <a>
+              <h1 className={style['header']}>NEAR Paste</h1>
+            </a>
+          </Link>
+        </span>
 
         <span className={style['right-content']}>
           <Link href={'/stats'}>

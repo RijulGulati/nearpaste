@@ -143,13 +143,17 @@ const Home: NextPage<HomeProps> = (props) => {
         </Form.Item>
         <br />
         <Form.Item>
-          <Button htmlType={'submit'} type={'primary'} loading={buttonLoader}>
+          <Button
+            htmlType={'submit'}
+            type={'primary'}
+            loading={buttonLoader}
+            disabled={txnId ? true : false}
+          >
             {buttonText}
           </Button>
         </Form.Item>
       </Form>
 
-      <Divider />
       <>
         {txnId ? (
           <>
@@ -173,12 +177,22 @@ const Home: NextPage<HomeProps> = (props) => {
                 </a>
               </Link>
             </p>
-            <br />
           </>
         ) : (
           <></>
         )}
       </>
+
+      <Divider />
+      <p className={style['about']}>
+        NEAR Paste is an open-source blockchain-based Pastebin built on NEAR
+        Protocol. The server has zero knowledge about any pasted data. Data is
+        encrypted/decrypted using AES encryption in the browser itself.
+      </p>
+      <p className={style['about']}>
+        Pasted data sent to blockchain is visible in Explorer. It is recommended
+        to use password.
+      </p>
     </>
   );
 };

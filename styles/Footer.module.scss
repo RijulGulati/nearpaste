@@ -4,7 +4,6 @@
   background-color: $background-color;
   border-top: 1px solid $border-color;
   height: 36px;
-  padding: 0 36x;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -27,7 +26,7 @@
   font-size: 16px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1180px) {
   .fa-icon,
   .copyright,
   .stats-link {
