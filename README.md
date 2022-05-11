@@ -1,34 +1,81 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NEAR Paste
 
-## Getting Started
+NEAR Paste is an open-source blockchain-based Pastebin built on NEAR Protocol. The server has zero knowledge about any pasted data. Data is encrypted/decrypted using AES encryption in the browser itself.
 
-First, run the development server:
+**The application neither requires user to login/signup nor connecting to any wallet. All pastes are funded by app's account itself.**
 
-```bash
-npm run dev
-# or
-yarn dev
+Testnet account: [nearpaste.testnet](https://explorer.testnet.near.org/accounts/nearpaste.testnet)
+
+# Features
+
+- Paste encryption with Password: Encryption/decryption of data takes place in-browser. Your password is NEVER sent to server.
+- Zero-knowledge access: Server has no knowledge about any paste data being sent to blockchain.
+  - **Note:** The server does not log any paste data. However, paste data content is visible in NEAR explorer. It is suggested to use password.
+
+# Smart contract
+
+The contract code is written in Rust. Code is available in [`contract/`](https://github.com/RijulGulati/nearpaste/tree/main/contract) directory. Build instructions are available below.
+
+# Build
+
+## Rust contract
+
+- Requires [Rust](https://www.rust-lang.org/) and [`wasm`](https://rustwasm.github.io/docs/book/) toolchain. Detailed setup instructions are available [here](https://docs.near.org/docs/develop/contracts/rust/intro#1-install-rustup)
+
+### Build contract
+
+```sh
+$ cd contract/
+$ cargo build --target wasm32-unknown-unknown --release
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This will generate `nearpaste.wasm` binary in `target/wasm32-unknown-unknown/release` directory.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+### Deploy
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+```sh
+$ near deploy <account_id> --wasmFile target/wasm32-unknown-unknown/release/nearpaste.wasm --initFunction 'new' --initArgs '{}'
+```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+Where `<account_id>` is NEAR Account Id.
 
-## Learn More
+### Run tests
 
-To learn more about Next.js, take a look at the following resources:
+```sh
+$ cargo test
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## NextJs application
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Requires [NodeJs](https://nodejs.org/en/) and `yarn` installed.
+- The following environment variables are required:
 
-## Deploy on Vercel
+  - `NEAR_ACCOUNT_ID=<account_id> # Eg: nearpaste.testnet`
+  - `NEAR_NETWORK_ID=testnet # or mainnet - TODO: add mainnet support`
+  - `NEAR_ACCOUNT_PRIVATE_KEY=<private_key> # account private key`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+  Create a new file `.env.local` in application root and above mentioned variables.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Run development environment
+
+```sh
+$ yarn dev
+```
+
+### Production build
+
+```sh
+$ yarn build
+```
+
+# Contributions
+
+All kinds of contributions are welcome. Please raise a pull request or create an Issue.
+
+# Contacts
+
+Feel free to get in touch with me on [Discord](https://discordapp.com/users/778312151467163670) or [Telegram](https://t.me/rijulgulati).
+
+# License
+
+[MIT](https://github.com/RijulGulati/nearpaste/blob/main/LICENSE)
