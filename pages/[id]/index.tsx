@@ -101,7 +101,7 @@ const Paste: NextPage<PasteDetailsProps> = (props) => {
                 disabled
                 rows={13}
               ></Input.TextArea>
-              <br />
+              <p className={style['create-date']}>{paste.createdAt}</p>
               <br />
               <Space size={'large'}>
                 <Button

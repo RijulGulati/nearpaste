@@ -80,7 +80,9 @@ const getPasteUx = async (host: string, pasteId: string) => {
     let pasteData = data.data as HttpPasteGetResponse;
     paste = {
       content: pasteData.content,
-      createdAt: new Date(pasteData.timestamp * 1000).toUTCString(),
+      createdAt: new Date(
+        Math.trunc(pasteData.timestamp / 1000000)
+      ).toUTCString(),
       id: pasteData.id,
       isEncrypted: pasteData.isEncrypted,
       title: pasteData.title,

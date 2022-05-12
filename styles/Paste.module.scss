@@ -19,6 +19,13 @@
   margin-top: 40px;
 }
 
+.create-date {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  font-style: italic;
+}
+
 @media screen and (max-width: 1180px) {
   .url-box {
     width: 70% !important;
